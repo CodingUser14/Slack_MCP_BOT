@@ -1,10 +1,14 @@
 import { App } from '@slack/bolt';
+import "dotenv/config";
+
 
 /**
  * This sample Slack application uses Socket Mode.
  * For the companion getting started setup guide, see:
  * https://docs.slack.dev/tools/bolt-js/getting-started/
  */
+
+
 
 // Initializes your app with your bot token and app token
 const app = new App({
@@ -13,8 +17,15 @@ const app = new App({
   appToken: process.env.SLACK_APP_TOKEN
 });
 
+
+app.message("yo", async ({ message, say }) => {
+  console.log("DM/message received:", message.text);
+  await say(`Bruh sup bro <@${message.user}>!`);
+});
+
 // Listens to incoming messages that contain "hello"
 app.message('hello', async ({ message, say }) => {
+  console.log("hello")
   // say() sends a message to the channel where the event was triggered
   await say({
     blocks: [
@@ -38,6 +49,8 @@ app.message('hello', async ({ message, say }) => {
   });
 });
 
+
+
 app.action('button_click', async ({ body, ack, say }) => {
   // Acknowledge the action
   await ack();
@@ -47,6 +60,5 @@ app.action('button_click', async ({ body, ack, say }) => {
 (async () => {
   // Start your app
   await app.start(process.env.PORT || 3000);
-
   app.logger.info('⚡️ Bolt app is running!');
 })();
